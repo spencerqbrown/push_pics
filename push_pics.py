@@ -2,15 +2,12 @@ from pushbullet import Pushbullet
 from util import get_key
 import os
 
-def push_pics(source_dir):
+def push_pics(files_list, device=None, channel=None):
     # initialize pushbullet
     pb = Pushbullet(get_key())
     
-    # get files in directory
-    files_raw = os.listdir(source_dir)
-    
     # remove directories
-    files_proc = [os.path.join(source_dir, f) for f in files_raw if os.path.isfile(os.path.join(source_dir, f))]
+    files_proc = [f for f in files_list if os.path.isfile(f)]
 
     # push each file
     for f in files_proc:
