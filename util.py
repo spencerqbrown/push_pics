@@ -1,6 +1,6 @@
 
 
-def get_key():
-    with open("key.txt") as k:
+def get_key(key_file):
+    with open(key_file) as k:
         return k.read()
 
