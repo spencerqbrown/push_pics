@@ -1,5 +1,5 @@
 import sys
-from PyQt5.QtWidgets import QApplication, QFileDialog, QWidget, QPushButton, QDesktopWidget, QMainWindow, QLineEdit, QGridLayout, QLabel
+from PyQt5.QtWidgets import QApplication, QFileDialog, QWidget, QPushButton, QDesktopWidget, QListWidget, QLineEdit, QGridLayout, QLabel
 from push_pics import push_pics
 
 class push_pics_ui(QWidget):
@@ -20,7 +20,7 @@ class push_pics_ui(QWidget):
 
         # setup elements
         # labels
-        # dir_select = QLabel("Directory")
+        self.push_status = QLabel("")
 
         # buttons
         # file select
@@ -28,10 +28,13 @@ class push_pics_ui(QWidget):
         self.dir_select_button.clicked.connect(self.get_files)
         # push
         self.push_button = QPushButton("Push")
-        self.dir_select_button.clicked.connect(self.execute_push)
+        self.push_button.clicked.connect(self.execute_push)
 
         # line edits
         self.dir_select_edit = QLineEdit()
+
+        # lists
+        self.file_list = QListWidget()
 
         # grid
         self.grid = QGridLayout()
@@ -39,11 +42,13 @@ class push_pics_ui(QWidget):
 
         # arrange grid
         self.grid.addWidget(self.dir_select_button, 1, 0)
-        self.grid.addWidget(self.dir_select_edit, 1, 1)
+        self.grid.addWidget(self.file_list, 1, 1)
         self.grid.addWidget(self.push_button, 2, 0)
+        self.grid.addWidget(self.push_status, 2, 1)
         self.setLayout(self.grid)
 
         # show
+        self.setWindowTitle("PushPics")
         self.show()
 
     def center(self):
@@ -58,10 +63,11 @@ class push_pics_ui(QWidget):
         if file_dialog.exec_():
             self.filenames = file_dialog.selectedFiles()
             filenames_nobrackets = str(self.filenames).replace("[", "").replace("]", "").replace("'", "")
-            self.dir_select_edit.setText(filenames_nobrackets)
+            self.file_list.addItems(self.filenames)
 
     def execute_push(self):
         push_pics(self.filenames, self.device, self.channel)
+        self.push_status.setText("Pushed!")
 
 
 def main():
